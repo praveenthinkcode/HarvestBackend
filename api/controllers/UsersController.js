@@ -14,11 +14,11 @@ module.exports = {
     var yyyy=today.getFullYear();
     today=mm + '/' + dd +'/' +yyyy;
     var id=""+Math.floor(Date.now() / 1000)+Math.floor(Math.random() * 101);
-    var totalAmount=0;
+    var totalPrice=0;
     req.body.items.map((data)=>{
-        totalAmount=totalAmount+parseInt(data['product-pricePerUnit']);
+        totalPrice=totalPrice+parseInt(data['product-pricePerUnit']);
     })
-    var finalPrice=totalAmount;
+    var finalPrice=totalPrice;
       Users.findOrCreate({mobile:req.body.mobile},{userid:id,name:req.body.name,mobile:req.body.mobile,Date:today}).exec(async(err,user,wascreated)=>{
         
         if(err){
@@ -26,22 +26,22 @@ module.exports = {
             res.json({message:"error in placing order"})
         }
         if(wascreated){
-        Orders.create({orderDate:today,items:req.body.items,totalAmount:totalAmount,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:req.body.finalPrice,payment:req.body.payment,paymentId:id,orderStatus:"placed",userName:req.body.name,userMobile:req.body.mobile}).fetch().exec((err,data)=>{
+        Orders.create({orderID:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
             if(err){
                 res.json({message:"error in placing order"})
             }
              else{
-                res.json({message:"OrderPlaced",id:id});
+                res.json({message:"OrderPlaced",orderID:id,});
             }
         }) 
         }
         if(user){
-            Orders.create({orderDate:today,items:req.body.items,totalAmount:totalAmount,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,payment:req.body.payment,paymentId:id,orderStatus:"placed",userName:req.body.name,userMobile:req.body.mobile}).fetch().exec((err,data)=>{
+            Orders.create({orderID:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
                 if(err){
                     res.json({message:"error in placing order"})
                 }
                  else{
-                    res.json({message:"OrderPlaced",id:id});
+                    res.json({message:"OrderPlaced",orderID:id,});
                 }
             }) 
             }
