@@ -13,7 +13,7 @@ module.exports = {
           unique: true,
       },
       orderDate: {
-          type: 'number',
+          type: 'string',
           required: false,
       },
       items: {
@@ -78,7 +78,7 @@ consolidateOrders: async () => {
       items.push(item);
     })
   });
-  let groupedItems = _.groupBy(items, 'category');
+  let groupedItems = _.groupBy(items, 'product-category');
   let consolidatedItems = [];
   Object.keys(groupedItems).map((key) => {
     let tempArr = [];
@@ -89,9 +89,12 @@ consolidateOrders: async () => {
       } else {
         let flag = 0;
         tempArr.map((tempItem) => {
-          if(tempItem.id === item.id) {
+          if(tempItem['product-id'] === item['product-id']) {
             flag = 1;
-            tempItem.quantity += item.quantity;
+            var tempQuantity= parseInt(tempItem['product-quantity']);
+            var itemQuantity= parseInt(item['product-quantity']);
+            tempQuantity=tempQuantity+itemQuantity;
+            tempItem['product-quantity']=tempQuantity;
           }
         });
         if(flag === 0) {
