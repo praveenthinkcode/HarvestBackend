@@ -26,7 +26,7 @@ module.exports = {
             res.json({message:"error in placing order"})
         }
         if(wascreated){
-        Orders.create({orderID:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
+        Orders.create({orderId:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
             if(err){
                 res.json({message:"error in placing order"})
             }
@@ -36,7 +36,7 @@ module.exports = {
         }) 
         }
         if(user){
-            Orders.create({orderID:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
+            Orders.create({orderId:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
                 if(err){
                     res.json({message:"error in placing order"})
                 }
