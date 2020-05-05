@@ -28,7 +28,7 @@ module.exports = {
             if (user){ 
                 
                 if (user.role === "customer") { 
-                    token = jwt.sign({user:req.body.deviceId},secretKey); 
+                    token = jwt.sign({user:today},secretKey); 
                     AuthenticationToken.create({token:token,Date:today}).exec((err,user)=>{ 
                         if(err){ 
                             console.log("Error creating Token") 
@@ -39,7 +39,7 @@ module.exports = {
                     }); 
                 } 
                 else if (user.role === "admin") { 
-                    token=jwt.sign({user:req.body.deviceId},secretKey); 
+                    token=jwt.sign({user:secretKey},"admin"); 
                     AuthenticationToken.create({token:token,Date:today}).exec((err,user)=>{ 
                         if(err){ 
                             console.log("Error creating Token") 
