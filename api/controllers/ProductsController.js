@@ -33,6 +33,7 @@ module.exports = {
                name: req.body.name,
                category: req.body.category,
                price: req.body.price,
+               image: req.body.image,
                pricePerUnit: req.body.pricePerUnit,
                sellers: [],
             });
@@ -69,6 +70,7 @@ module.exports = {
               name: req.body.name,
               price: req.body.price,
               pricePerUnit: req.body.pricePerUnit,
+              image: req.body.image,
               category:req.body.category
             };
               await Products.update({id: req.body.id}, patch);

@@ -7,7 +7,6 @@
 // import * as Orders from '../models/Orders';
 
 let _ = require('lodash');
-let jsontocsv = require('jsontocsv');
 let path = require('path');
 let XLSX = require('xlsx');
 let filePath = path.resolve(__dirname + '/../../order_report.csv');
