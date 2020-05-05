@@ -83,7 +83,6 @@ consolidateOrders: async () => {
   Object.keys(groupedItems).map((key) => {
     let tempArr = [];
     groupedItems[key].map((item) => {
-      console.log('ITEM::::', item);
       if(tempArr.length === 0) {
         tempArr.push(item);
       } else {
@@ -104,7 +103,6 @@ consolidateOrders: async () => {
     });
     groupedItems[key] = tempArr;
   });
-  console.log('GROUPED::', groupedItems);
   return groupedItems;
 }
 };

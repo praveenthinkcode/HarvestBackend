@@ -10,7 +10,7 @@ module.exports = {
         AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
             if(found){
                 var data=await Products.find().sort();
-                res.json({message:"Success",data:data})  
+                res.json({message:"Success",data:data})
             }
             else{
                 res.json({message:"Invalid user login again"})
@@ -25,7 +25,6 @@ module.exports = {
         })
     },
     createProduct: async (req, res) => {
-        console.log('CREATE HIT');
          try {
             // let itemsList = await Ecom.find().sort('productId DESC');
             // let currentId = itemsList[0].productId + 1;
@@ -42,28 +41,37 @@ module.exports = {
               msg: 'PRODUCT ADDED'
             });
          } catch(error) {
-            console.log('ERROR CREATING ITEM::', error);
             res.serverError({
               status: 500,
               msg: error
             });
          }
       },
-    
+
       getAllProducts: async (req, res) => {
-        try {
-          let allProducts = await Products.find();
-          return res.ok({
-            status: 200,
-            allProducts: allProducts});
-        } catch (error) {
-          return res.serverError({
-            status: 500,
-            msg: error
-          });
-        }
+          AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
+              if(found){
+                  try {
+                      let allProducts = await Products.find();
+                      return res.ok({
+                          status: 200,
+                          allProducts: allProducts});
+                  } catch (error) {
+                      return res.serverError({
+                          status: 500,
+                          msg: error
+                      });
+                  }
+              }
+              else{
+                  return res.json({
+                      status:401
+                  })
+              }
+          })
+
       },
-    
+
       editProduct: async(req, res) => {
           try {
             let patch = {
@@ -79,14 +87,13 @@ module.exports = {
                 msg: 'PRODUCT EDITED',
               });
             } catch(error) {
-              console.log('ERROR EDITITNG PRODUCT::', error);
               res.serverError({
                 status: 500,
                 msg: error
               });
             }
       },
-    
+
       deleteProduct: async (req, res) => {
         try {
           await Products.destroy({id: req.body.id});
@@ -98,6 +105,6 @@ module.exports = {
           res.serverError(error);
         }
       }
-    
+
 };
 
