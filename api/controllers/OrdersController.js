@@ -21,7 +21,6 @@ module.exports = {
             if(found){
                 try {
                     let allOrders = await Orders.find();
-                    console.log('ORDERS::', allOrders);
                     return res.ok({
                         status: 200,
                         allOrders: allOrders
@@ -75,7 +74,6 @@ module.exports = {
             };
             await Orders.update({ orderId: req.body.orderId }, orderStatusPatch);
             let order = await Orders.findOne({ orderId: req.body.orderId });
-            console.log('UPDATED ORDER::', order);
             res.ok({
               status: 200,
               msg: 'Marked as Delivered'

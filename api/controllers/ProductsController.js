@@ -15,7 +15,7 @@ module.exports = {
             else{
                 res.json({message:"Invalid user login again"})
             }
-        })
+        }) 
     },
     uniqueProduct:function(req,res){
         Products.findOne({id:req.body.productId},(err,found)=>{
