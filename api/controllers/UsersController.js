@@ -45,7 +45,15 @@ module.exports = {
             })
             }
       })
-  }
+  },
+  removeUser:async function(req,res){
+    console.log("ded")
+    console.log(req.body)
+      var removeUser=await AuthenticationToken.destroyOne({token:req.body.token});
+      if(removeUser){
+          res.json({message:"Success"});
+      }
+}
 
 };
 
