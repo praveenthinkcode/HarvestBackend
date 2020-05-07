@@ -31,10 +31,12 @@ module.exports = {
             await Products.create({
                name: req.body.name,
                category: req.body.category.charAt(0).toUpperCase() + req.body.category.slice(1),
+               description: req.body.description,
                price: req.body.price,
                priceOthers: (req.body.price === 'others') ? req.body.priceOthers : '',
                image: req.body.image,
                pricePerUnit: req.body.pricePerUnit,
+               availability: req.body.availability,
                sellers: [],
             });
             res.ok({
@@ -78,10 +80,12 @@ module.exports = {
             let patch = {
               name: req.body.name,
               price: req.body.price,
+              description: req.body.description,
               priceOthers: (req.body.price === 'others') ? req.body.priceOthers : '',
               pricePerUnit: req.body.pricePerUnit,
               image: req.body.image,
-              category:req.body.category.charAt(0).toUpperCase() + req.body.category.slice(1)
+              category:req.body.category.charAt(0).toUpperCase() + req.body.category.slice(1),
+              availability: req.body.availability,
             };
               await Products.update({id: req.body.id}, patch);
               res.ok({
