@@ -21,7 +21,33 @@ module.exports.routes = {
 
   '/': { view: 'pages/homepage' },
 
+   'GET /orders/allOrders': 'OrdersController.getAllOrders',
+  // Get Recent Orders
+  'GET /orders/recentOrders': 'OrdersController.getRecentOrders',
+  // Mark Order as Delivered
+  'POST /orders/markAsDelivered': 'OrdersController.markAsDelivered',
+  // Create Order
+  'POST /orders/createOrder': 'OrdersController.createOrder',
+  // CSV convert
+  'GET /orders/downloadOrderReport': 'OrdersController.downloadOrderReport',
+  // Create/Add Product
+  'POST /products/createProduct': 'ProductsController.createProduct',
+  // Get All Products
+  'GET /products/allProducts': 'ProductsController.getAllProducts',
+  // Edit/Update Product
+  'PATCH /products/editProduct': 'ProductsController.editProduct',
+  // Delete Product
+  'DELETE /products/deleteProduct': 'ProductsController.deleteProduct',
 
+  'POST /users/removeUser': 'Users.Controller.removeUser',
+
+  'POST /users/addUser':  'UsersController.addUser',
+
+  'POST /products/getProducts': 'ProductsController.getProducts',
+
+  'POST /products/uniqueProduct/':'ProductsController.uniqueProduct',
+
+  'POST /auth/login':  'AuthController.login'
   /***************************************************************************
   *                                                                          *
   * More custom routes here...                                               *
