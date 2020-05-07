@@ -21,9 +21,9 @@ module.exports.routes = {
 
   '/': { view: 'pages/homepage' },
 
-   'GET /orders/allOrders': 'OrdersController.getAllOrders',
+  'POST /orders/allOrders': 'OrdersController.getAllOrders',
   // Get Recent Orders
-  'GET /orders/recentOrders': 'OrdersController.getRecentOrders',
+  'POST /orders/recentOrders': 'OrdersController.getRecentOrders',
   // Mark Order as Delivered
   'POST /orders/markAsDelivered': 'OrdersController.markAsDelivered',
   // Create Order
@@ -33,7 +33,7 @@ module.exports.routes = {
   // Create/Add Product
   'POST /products/createProduct': 'ProductsController.createProduct',
   // Get All Products
-  'GET /products/allProducts': 'ProductsController.getAllProducts',
+  'POST /products/allProducts': 'ProductsController.getAllProducts',
   // Edit/Update Product
   'PATCH /products/editProduct': 'ProductsController.editProduct',
   // Delete Product

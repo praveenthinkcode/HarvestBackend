@@ -15,7 +15,7 @@ module.exports = {
             else{
                 res.json({message:"Invalid user login again"})
             }
-        }) 
+        })
     },
     uniqueProduct:function(req,res){
         Products.findOne({id:req.body.productId},(err,found)=>{
@@ -30,8 +30,9 @@ module.exports = {
             // let currentId = itemsList[0].productId + 1;
             await Products.create({
                name: req.body.name,
-               category: req.body.category,
+               category: req.body.category.charAt(0).toUpperCase() + req.body.category.slice(1),
                price: req.body.price,
+               priceOthers: (req.body.price === 'others') ? req.body.priceOthers : '',
                image: req.body.image,
                pricePerUnit: req.body.pricePerUnit,
                sellers: [],
@@ -77,9 +78,10 @@ module.exports = {
             let patch = {
               name: req.body.name,
               price: req.body.price,
+              priceOthers: (req.body.price === 'others') ? req.body.priceOthers : '',
               pricePerUnit: req.body.pricePerUnit,
               image: req.body.image,
-              category:req.body.category
+              category:req.body.category.charAt(0).toUpperCase() + req.body.category.slice(1)
             };
               await Products.update({id: req.body.id}, patch);
               res.ok({
