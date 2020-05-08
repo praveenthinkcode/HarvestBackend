@@ -24,16 +24,6 @@ module.exports = {
         if(err){
             res.json({message:"error in placing order"})
         }
-        if(wascreated){
-        Orders.create({orderId:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
-            if(err){
-                res.json({message:"error in placing order"})
-            }
-             else{
-                res.json({message:"OrderPlaced",orderID:id,});
-            }
-        })
-        }
         if(user){
             Orders.create({orderId:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
                 if(err){
