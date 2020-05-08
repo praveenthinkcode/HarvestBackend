@@ -71,7 +71,7 @@ module.exports = {
   },
 
 consolidateOrders: async () => {
-  let orderItems = await Orders.find({ orderStatus: 'Order Placed' });
+  let orderItems = await Orders.find({ orderStatus: 'OrderPlaced' });
   let items = [];
   orderItems.map((orderItem) => {
     orderItem.items.map((item) => {
