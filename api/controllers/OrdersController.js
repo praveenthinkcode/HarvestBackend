@@ -44,7 +44,7 @@ module.exports = {
         AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
             if(found){
                 try {
-                    let recentOrders = await Orders.find({ orderStatus: "Order Placed" });
+                    let recentOrders = await Orders.find({ orderStatus: "OrderPlaced" }).sort('createdAt DESC');
                     let groupedItems = await Orders.consolidateOrders();
                     return res.ok({
                         status: 200,
@@ -77,6 +77,25 @@ module.exports = {
             res.ok({
               status: 200,
               msg: 'Marked as Delivered'
+            });
+        } catch (error) {
+            return res.serverError({
+              status: 500,
+              msg: error
+            });
+        }
+    },
+
+    rejectOrder: async (req, res) => {
+        try {
+            let orderStatusPatch = {
+                orderStatus: 'Rejected',
+            };
+            await Orders.update({ orderId: req.body.orderId }, orderStatusPatch);
+            let order = await Orders.findOne({ orderId: req.body.orderId });
+            res.ok({
+              status: 200,
+              msg: 'Marked as Rejected'
             });
         } catch (error) {
             return res.serverError({

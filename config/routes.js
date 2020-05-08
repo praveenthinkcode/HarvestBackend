@@ -26,6 +26,8 @@ module.exports.routes = {
   'POST /orders/recentOrders': 'OrdersController.getRecentOrders',
   // Mark Order as Delivered
   'POST /orders/markAsDelivered': 'OrdersController.markAsDelivered',
+  // Mark Order as Rejected - Reject order
+  'POST /orders/rejectOrder': 'OrdersController.rejectOrder',
   // Create Order
   'POST /orders/createOrder': 'OrdersController.createOrder',
   // CSV convert

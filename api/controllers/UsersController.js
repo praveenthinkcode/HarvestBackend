@@ -17,7 +17,7 @@ module.exports = {
     var totalPrice=0;
     req.body.items.map((data)=>{
         totalPrice=totalPrice+parseInt(data['product-pricePerUnit']);
-    })
+    });
     var finalPrice=totalPrice;
       Users.findOrCreate({mobile:req.body.mobile},{userid:id,name:req.body.name,mobile:req.body.mobile,Date:today}).exec(async(err,user,wascreated)=>{
 
@@ -25,7 +25,7 @@ module.exports = {
             res.json({message:"error in placing order"})
         }
         if(user){
-            Orders.create({orderId:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"Order Placed",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
+            Orders.create({orderId:id,orderDate:today,items:req.body.items,totalPrice:totalPrice,couponApplied:req.body.coupon,discount:req.body.coupon,finalPrice:finalPrice,paymentID:id,orderStatus:"OrderPlaced",userName:req.body.name,userMobileNo:req.body.mobile}).fetch().exec((err,data)=>{
                 if(err){
                     res.json({message:"error in placing order"})
                 }
