@@ -16,7 +16,7 @@ module.exports = {
     var id=""+Math.floor(Date.now() / 1000)+Math.floor(Math.random() * 101);
     var totalPrice=0;
     req.body.items.map((data)=>{
-        totalPrice=totalPrice+parseInt(data['product-pricePerUnit']);
+        totalPrice=totalPrice+parseInt(data['product-total']);
     });
     var finalPrice=totalPrice;
       Users.findOrCreate({mobile:req.body.mobile},{userid:id,name:req.body.name,mobile:req.body.mobile,Date:today}).exec(async(err,user,wascreated)=>{
