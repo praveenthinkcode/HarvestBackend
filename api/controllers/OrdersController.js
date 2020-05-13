@@ -109,7 +109,9 @@ module.exports = {
 
       try {
 
-        let recentOrders = await Orders.find({ orderStatus: "Order Placed" });
+        let recentOrders = await Orders.find({ orderStatus: "OrderPlaced" });
+        let groupedItems = await Orders.consolidateOrders();
+       var loop=true;
         let orderReports = [];
 
         async.forEachOf(recentOrders, (order, key, cb) => {
@@ -124,7 +126,8 @@ module.exports = {
           };
 
           async.forEachOf(order.items, (orderItem, key, innercb) => {
-            let items = orderItem['product-name'] + ' - ' + orderItem['product-quantity'] + ' ' + orderItem['product-price'];
+            var unit=(orderItem['product-price']!=='others')?orderItem['product-price']:orderItem['product-priceOthers'];
+            let items = orderItem['product-name'] + ' - ' + orderItem['product-quantity'] + ' ' + unit;
             if (key < order.items.length - 1) {
               items = items + ', ';
             }
@@ -132,8 +135,22 @@ module.exports = {
             innercb();
           },
           () => {
-            orderReports.push(orderDetails);
-            cb();
+            if(loop){
+              loop=false;
+            Object.keys(groupedItems).map((key)=>{
+              let consolidatedItems;
+              groupedItems[key].map((product,i)=>{
+                var unit=(product['product-price']!=='others')?product['product-price']:product['product-priceOthers'];
+               consolidatedItems=product['product-name']+' '+product['product-quantity']+' '+unit;
+               if(i<groupedItems[key].length-1){
+                 consolidatedItems=consolidatedItems+', ';
+               }
+               (orderDetails[key]!=null)?orderDetails[key]+=consolidatedItems:orderDetails[key]=consolidatedItems;
+              })
+            })
+          }
+          orderReports.push(orderDetails);
+          cb();
           });
         },
         () => {
