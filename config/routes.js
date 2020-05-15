@@ -32,6 +32,8 @@ module.exports.routes = {
   'POST /orders/createOrder': 'OrdersController.createOrder',
   // CSV convert
   'GET /orders/downloadOrderReport': 'OrdersController.downloadOrderReport',
+  
+  'GET /orders/downloadConsolidatedProducts': 'OrdersController.downloadConsolidatedProducts',
   // Create/Add Product
   'POST /products/createProduct': 'ProductsController.createProduct',
   // Get All Products
