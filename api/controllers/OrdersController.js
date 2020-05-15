@@ -105,6 +105,49 @@ module.exports = {
         }
     },
 
+    
+    downloadConsolidatedProducts: async (req,res)=>{
+        try{
+          var orderDetails={};
+          var orderReports=[];
+          let groupedItems = await Orders.consolidateOrders();
+          Object.keys(groupedItems).map((key)=>{
+            let consolidatedItems;
+            groupedItems[key].map((product,i)=>{
+              var unit=(product['product-price']!=='others')?product['product-price']:product['product-priceOthers'];
+              consolidatedItems=product['product-name']+' - '+product['product-quantity']+' '+unit;
+             if(i<groupedItems[key].length-1){
+               consolidatedItems=consolidatedItems+',  ';
+             }
+             (orderDetails[key]!=null)?orderDetails[key]+=consolidatedItems:orderDetails[key]=consolidatedItems;
+            })
+          })
+          orderReports.push(orderDetails);
+
+            var workSheet = XLSX.utils.json_to_sheet(orderReports, {dateNF: 'yyyy-mm-dd@'});
+            var workBook = XLSX.utils.book_new();
+  
+            XLSX.utils.book_append_sheet(workBook, workSheet, 'consolidated_products');
+            XLSX.writeFile(workBook, filePath);
+  
+            if (fs.existsSync(filePath)) {
+              res.setHeader('Content-disposition', 'attachment; filename=' + 'consolidated_products_reports.csv');
+              var filestream = fs.createReadStream(filePath);
+              filestream.pipe(res);
+            }
+            else {
+              return res.json({error : "File not Found"});
+            }
+        
+        }
+        catch (error) {
+          return res.serverError({
+            status: 500,
+            msg: error
+          });
+        }
+    },
+
     downloadOrderReport: async (req, res) => {
 
       try {
