@@ -114,7 +114,7 @@ module.exports = {
           Object.keys(groupedItems).map((key)=>{
             groupedItems[key].map((product,i)=>{
               var unit=(product['product-price']!=='others')?product['product-price']:product['product-priceOthers'];
-              var orderDetails={'Category':key,'Items':product['product-name']+' - '+product['product-quantity']+' '+unit+' - Rs.'+product['product-total']};
+              var orderDetails={'Category':key,'Items':product['product-name'],Quantity:product['product-quantity']+' '+unit,Price:'Rs.'+product['product-total']};
               orderReports.push(orderDetails);
             })
           })
@@ -141,6 +141,7 @@ module.exports = {
           });
         }
     },
+
     
     downloadOrderReport: async (req, res) => {
 
