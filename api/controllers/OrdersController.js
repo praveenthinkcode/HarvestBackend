@@ -107,23 +107,17 @@ module.exports = {
 
     
     downloadConsolidatedProducts: async (req,res)=>{
+
         try{
-          var orderDetails={};
           var orderReports=[];
           let groupedItems = await Orders.consolidateOrders();
           Object.keys(groupedItems).map((key)=>{
-            let consolidatedItems;
             groupedItems[key].map((product,i)=>{
               var unit=(product['product-price']!=='others')?product['product-price']:product['product-priceOthers'];
-              consolidatedItems=product['product-name']+' - '+product['product-quantity']+' '+unit;
-             if(i<groupedItems[key].length-1){
-               consolidatedItems=consolidatedItems+',  ';
-             }
-             (orderDetails[key]!=null)?orderDetails[key]+=consolidatedItems:orderDetails[key]=consolidatedItems;
+              var orderDetails={'Category':key,'Items':product['product-name']+' - '+product['product-quantity']+' '+unit+' - Rs.'+product['product-total']};
+              orderReports.push(orderDetails);
             })
           })
-          orderReports.push(orderDetails);
-
             var workSheet = XLSX.utils.json_to_sheet(orderReports, {dateNF: 'yyyy-mm-dd@'});
             var workBook = XLSX.utils.book_new();
   
@@ -147,7 +141,7 @@ module.exports = {
           });
         }
     },
-
+    
     downloadOrderReport: async (req, res) => {
 
       try {
