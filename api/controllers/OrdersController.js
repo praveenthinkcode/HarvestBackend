@@ -150,7 +150,6 @@ module.exports = {
         try {
             let recentOrders = await Orders.find({ orderStatus: "OrderPlaced" });
             let groupedItems = await Orders.consolidateOrders();
-            var loop=true;
             let orderReports = [];
 
             async.forEachOf(recentOrders, (order, key, cb) => {
@@ -172,20 +171,6 @@ module.exports = {
                     orderDetails['Orders'] += items;
                     innercb();
                 }, () => {
-                    if(loop){
-                        loop=false;
-                        Object.keys(groupedItems).map((key)=>{
-                            let consolidatedItems;
-                            groupedItems[key].map((product,i)=>{
-                                var unit=(product['product-price']!=='others')?product['product-price']:product['product-priceOthers'];
-                                consolidatedItems=product['product-name']+' '+product['product-quantity']+' '+unit;
-                                if(i<groupedItems[key].length-1){
-                                    consolidatedItems=consolidatedItems+', ';
-                                }
-                                (orderDetails[key]!=null)?orderDetails[key]+=consolidatedItems:orderDetails[key]=consolidatedItems;
-                            })
-                        })
-                    }
                     orderReports.push(orderDetails);
                     cb();
                 });
