@@ -74,8 +74,17 @@ module.exports = {
       }
   },
 
-consolidateOrders: async () => {
+consolidateOrders: async (startDate,endDate,dateSelected) => {
     let orderItems = await Orders.find({ orderStatus: 'OrderPlaced' });
+    if(dateSelected!=='no'){
+        var orderItems1=[];
+        orderItems.map((orders)=>{
+        if(orders.orderDate>=startDate&&orders.orderDate<=endDate){
+            orderItems1.push(orders);
+        }
+    })
+    orderItems=orderItems1;
+    }
     let items = [];
     orderItems.map((orderItem) => {
         orderItem.items.map((item) => {
