@@ -50,6 +50,12 @@ module.exports = {
           type: 'string',
           allowNull: false,
       },
+      /*
+      * Order Status:
+      * * * OrderPlaced
+      * * * Delivered
+      * * * Rejected
+      * */
       orderStatus: {
           type: 'string',
           allowNull: false,
@@ -66,44 +72,42 @@ module.exports = {
           allowNull: false,
           required: true,
       }
-
-
   },
 
 consolidateOrders: async () => {
-  let orderItems = await Orders.find({ orderStatus: 'OrderPlaced' });
-  let items = [];
-  orderItems.map((orderItem) => {
-    orderItem.items.map((item) => {
-      items.push(item);
-    })
-  });
-  let groupedItems = _.groupBy(items, 'product-category');
-  let consolidatedItems = [];
-  Object.keys(groupedItems).map((key) => {
-    let tempArr = [];
-    groupedItems[key].map((item) => {
-      if(tempArr.length === 0) {
-        tempArr.push(item);
-      } else {
-        let flag = 0;
-        tempArr.map((tempItem) => {
-          if(tempItem['product-id'] === item['product-id']) {
-            flag = 1;
-            var tempQuantity= parseInt(tempItem['product-quantity']);
-            var itemQuantity= parseInt(item['product-quantity']);
-            tempQuantity=tempQuantity+itemQuantity;
-            tempItem['product-quantity']=tempQuantity;
-          }
+    let orderItems = await Orders.find({ orderStatus: 'OrderPlaced' });
+    let items = [];
+    orderItems.map((orderItem) => {
+        orderItem.items.map((item) => {
+            items.push(item);
         });
-        if(flag === 0) {
-          tempArr.push(item);
-        }
-      }
     });
-    groupedItems[key] = tempArr;
-  });
-  return groupedItems;
+    let groupedItems = _.groupBy(items, 'product-category');
+    let consolidatedItems = [];
+    Object.keys(groupedItems).map((key) => {
+        let tempArr = [];
+        groupedItems[key].map((item) => {
+            if(tempArr.length === 0) {
+                tempArr.push(item);
+            } else {
+                let flag = 0;
+                tempArr.map((tempItem) => {
+                    if(tempItem['product-id'] === item['product-id']) {
+                        flag = 1;
+                        var tempQuantity= parseInt(tempItem['product-quantity']);
+                        var itemQuantity= parseInt(item['product-quantity']);
+                        tempQuantity=tempQuantity+itemQuantity;
+                        tempItem['product-quantity']=tempQuantity;
+                    }
+                });
+                if(flag === 0) {
+                    tempArr.push(item);
+                }
+            }
+        });
+        groupedItems[key] = tempArr;
+    });
+    return groupedItems;
 }
 };
 

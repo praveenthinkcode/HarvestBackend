@@ -21,6 +21,7 @@ module.exports.routes = {
 
   '/': { view: 'pages/homepage' },
 
+  // Get All Orders
   'POST /orders/allOrders': 'OrdersController.getAllOrders',
   // Get Recent Orders
   'POST /orders/recentOrders': 'OrdersController.getRecentOrders',
@@ -30,38 +31,26 @@ module.exports.routes = {
   'POST /orders/rejectOrder': 'OrdersController.rejectOrder',
   // Create Order
   'POST /orders/createOrder': 'OrdersController.createOrder',
-  // CSV convert
+  // Download Order Report - Pending Orders
   'GET /orders/downloadOrderReport': 'OrdersController.downloadOrderReport',
-  
-  'GET /orders/downloadConsolidatedProducts': 'OrdersController.downloadConsolidatedProducts',
+  // Download Order Report - Consolidated Orders Report
+  'GET /orders/downloadConsolidatedOrderReport': 'OrdersController.downloadConsolidatedOrderReport',
   // Create/Add Product
   'POST /products/createProduct': 'ProductsController.createProduct',
-  // Get All Products
+  // Get All Products - Manage Products Page - Admin/Moderator Side
   'POST /products/allProducts': 'ProductsController.getAllProducts',
   // Edit/Update Product
   'PATCH /products/editProduct': 'ProductsController.editProduct',
   // Delete Product
   'DELETE /products/deleteProduct': 'ProductsController.deleteProduct',
-
+  // Remove User
   'POST /users/removeUser': 'Users.Controller.removeUser',
-
+  // Add User
   'POST /users/addUser':  'UsersController.addUser',
-
+  // Get Products - Home Page - User/Customer Side
   'POST /products/getProducts': 'ProductsController.getProducts',
-
+  // Check Product Uniqueness
   'POST /products/uniqueProduct/':'ProductsController.uniqueProduct',
-
+  // Login
   'POST /auth/login':  'AuthController.login'
-  /***************************************************************************
-  *                                                                          *
-  * More custom routes here...                                               *
-  * (See https://sailsjs.com/config/routes for examples.)                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the routes in this file, it   *
-  * is matched against "shadow routes" (e.g. blueprint routes).  If it does  *
-  * not match any of those, it is matched against static assets.             *
-  *                                                                          *
-  ***************************************************************************/
-
-
 };

@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+    // Get Products - Home Page - Users Side
     getProducts:async function(req,res){
         AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
             if(found){
@@ -17,6 +18,8 @@ module.exports = {
             }
         })
     },
+
+    // Check for Unique Product
     uniqueProduct:function(req,res){
         Products.findOne({id:req.body.productId},(err,found)=>{
             if(found){
@@ -24,33 +27,36 @@ module.exports = {
             }
         })
     },
+
+    // Create Product
     createProduct: async (req, res) => {
          try {
-            // let itemsList = await Ecom.find().sort('productId DESC');
-            // let currentId = itemsList[0].productId + 1;
-            await Products.create({
-               name: req.body.name,
-               category: req.body.category.charAt(0).toUpperCase() + req.body.category.slice(1),
-               description: req.body.description,
-               price: req.body.price,
-               priceOthers: (req.body.price === 'others') ? req.body.priceOthers : '',
-               image: req.body.image,
-               pricePerUnit: req.body.pricePerUnit,
-               availability: req.body.availability,
-               sellers: [],
-            });
-            res.ok({
-              status: 200,
-              msg: 'PRODUCT ADDED'
-            });
+             // let itemsList = await Ecom.find().sort('productId DESC');
+             // let currentId = itemsList[0].productId + 1;
+             await Products.create({
+                 name: req.body.name,
+                 category: req.body.category.charAt(0).toUpperCase() + req.body.category.slice(1),
+                 description: req.body.description,
+                 price: req.body.price,
+                 priceOthers: (req.body.price === 'others') ? req.body.priceOthers : '',
+                 image: req.body.image,
+                 pricePerUnit: req.body.pricePerUnit,
+                 availability: req.body.availability,
+                 sellers: [],
+             });
+             res.ok({
+                 status: 200,
+                 msg: 'PRODUCT ADDED'
+             });
          } catch(error) {
             res.serverError({
-              status: 500,
-              msg: error
+                status: 500,
+                msg: error
             });
          }
       },
 
+    // Get All Products - Manage Products Page - Admin/Moderator Side
     getAllProducts: async (req, res) => {
         AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
             if(found){
@@ -69,11 +75,12 @@ module.exports = {
             else{
                 return res.json({
                     status:401
-                })
+                });
             }
         })
     },
 
+    // Edit Product - Admin Side
     editProduct: async(req, res) => {
         try {
             let patch = {
@@ -89,8 +96,8 @@ module.exports = {
             };
             await Products.update({id: req.body.id}, patch);
             return res.ok({
-               status: 200,
-               msg: 'PRODUCT EDITED',
+                status: 200,
+                msg: 'PRODUCT EDITED',
             });
         } catch(error) {
             res.serverError({
@@ -100,7 +107,7 @@ module.exports = {
         }
      },
 
-
+    // Delete Product - Admin Side
     deleteProduct: async (req, res) => {
         try {
             await Products.destroy({id: req.body.id});
@@ -112,7 +119,5 @@ module.exports = {
             res.serverError(error);
         }
     },
-
-
 };
 
