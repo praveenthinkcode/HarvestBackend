@@ -11,6 +11,9 @@ let path = require('path');
 let XLSX = require('xlsx');
 let fs = require('fs');
 let async = require('async');
+var startDate='';
+var endDate='';
+var dateSelected='no';
 let filePath = path.resolve(__dirname + '/../../order_report.csv');
 
 module.exports = {
@@ -38,14 +41,30 @@ module.exports = {
             }
         })
     },
-
+    
     // Get Pending Orders
     getRecentOrders: async (req, res) => {
+        
+          startDate=new Date(req.body.startDate);
+         startDate=startDate.getTime();
+          endDate=new Date(req.body.endDate);
+         endDate.setDate(endDate.getDate()+1);
+         endDate=endDate.getTime();
+         dateSelected=req.body.dateSelected;
         AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
             if(found){
                 try {
                     let recentOrders = await Orders.find({ orderStatus: "OrderPlaced" }).sort('orderDate DESC');
-                    let groupedItems = await Orders.consolidateOrders();
+                    if(req.body.dateSelected!=='no'){
+                        var recentOrders1=[];
+                    recentOrders.map((orders)=>{
+                        if(orders.orderDate>=startDate&&orders.orderDate<=endDate){
+                            recentOrders1.push(orders);
+                        }
+                    })
+                    recentOrders=recentOrders1;
+                    }
+                    let groupedItems = await Orders.consolidateOrders(startDate,endDate,dateSelected);
                     return res.ok({
                         status: 200,
                         recentOrders: recentOrders,
@@ -110,7 +129,7 @@ module.exports = {
     downloadConsolidatedOrderReport: async (req,res)=>{
         try{
             var orderReports=[];
-            let groupedItems = await Orders.consolidateOrders();
+            let groupedItems = await Orders.consolidateOrders(startDate,endDate,dateSelected);
             Object.keys(groupedItems).map((key)=>{
                 groupedItems[key].map((product,i)=>{
                     var unit=(product['product-price']!=='others')?product['product-price']:product['product-priceOthers'];
@@ -149,6 +168,16 @@ module.exports = {
     downloadOrderReport: async (req, res) => {
         try {
             let recentOrders = await Orders.find({ orderStatus: "OrderPlaced" });
+            if(dateSelected!=='no'){
+                var recentOrders1=[];
+            recentOrders.map((orders)=>{
+                if(orders.orderDate>=startDate&&orders.orderDate<=endDate){
+                    
+                    recentOrders1.push(orders);
+                }
+            })
+            recentOrders=recentOrders1;
+            }
             let groupedItems = await Orders.consolidateOrders();
             let orderReports = [];
 
@@ -177,7 +206,7 @@ module.exports = {
             }, () => {
                 var workSheet = XLSX.utils.json_to_sheet(orderReports, {dateNF: 'yyyy-mm-dd@'});
                 var workBook = XLSX.utils.book_new();
-
+                console.log('y')
                 XLSX.utils.book_append_sheet(workBook, workSheet, 'consolidated_orders');
                 XLSX.writeFile(workBook, filePath);
 
