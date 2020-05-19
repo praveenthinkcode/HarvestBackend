@@ -22,7 +22,22 @@ module.exports = {
         AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
             if(found){
                 try {
-                    let allOrders = await Orders.find();
+                    var allOrders = await Orders.find();
+                    var startDat=new Date(req.body.startDate);
+                    startDat=startDat.getTime();
+                    var endDat=new Date(req.body.endDate);
+                    endDat.setDate(endDat.getDate()+1);
+                    endDat=endDat.getTime();
+                    var dateSelecte=req.body.dateSelected;
+                    if(req.body.dateSelected!=='no'){
+                        var allOrders1=[];
+                        allOrders.map((orders)=>{
+                        if(orders.orderDate>=startDat&&orders.orderDate<=endDat){
+                            allOrders1.push(orders);
+                        }
+                    })
+                    allOrders=allOrders1;
+                    }
                     return res.ok({
                         status: 200,
                         allOrders: allOrders
