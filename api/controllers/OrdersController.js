@@ -28,7 +28,7 @@ module.exports = {
                     var endDat=new Date(req.body.endDate);
                     endDat.setDate(endDat.getDate()+1);
                     endDat=endDat.getTime();
-                    var dateSelecte=req.body.dateSelected;
+                    var filterVisible=false;
                     if(req.body.dateSelected!=='no'){
                         var allOrders1=[];
                         allOrders.map((orders)=>{
@@ -36,11 +36,13 @@ module.exports = {
                             allOrders1.push(orders);
                         }
                     })
+                    filterVisible=true;
                     allOrders=allOrders1;
                     }
                     return res.ok({
                         status: 200,
-                        allOrders: allOrders
+                        allOrders: allOrders,
+                        filterVisible:filterVisible
                     })
                 } catch (error) {
                     return res.serverError({
@@ -70,6 +72,7 @@ module.exports = {
             if(found){
                 try {
                     let recentOrders = await Orders.find({ orderStatus: "OrderPlaced" }).sort('orderDate DESC');
+                    var filterVisible=false;
                     if(req.body.dateSelected!=='no'){
                         var recentOrders1=[];
                     recentOrders.map((orders)=>{
@@ -77,13 +80,15 @@ module.exports = {
                             recentOrders1.push(orders);
                         }
                     })
+                    filterVisible=true;
                     recentOrders=recentOrders1;
                     }
                     let groupedItems = await Orders.consolidateOrders(startDate,endDate,dateSelected);
                     return res.ok({
                         status: 200,
                         recentOrders: recentOrders,
-                        groupedItems: groupedItems
+                        groupedItems: groupedItems,
+                        filterVisible:filterVisible
                     });
                 } catch (error) {
                     return res.serverError({
