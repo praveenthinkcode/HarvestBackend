@@ -254,7 +254,6 @@ module.exports = {
         pendingOrders.map(async (order) => {
             // 604800000 - One Week in Milli seconds
             if(currentDate - order.orderDate >= 604800000) {
-                console.log('ORDER::is a week old:', order );
                 order.orderStatus = 'OLD';
                 await Orders.updateOne({ id: order.id })
                     .set({
