@@ -26,7 +26,7 @@ module.exports = {
                     var startDat=new Date(req.body.startDate);
                     startDat=startDat.getTime();
                     var endDat=new Date(req.body.endDate);
-                    endDat.setDate(endDat.getDate()+1);
+                    endDat.setDate(endDat.getDate());
                     endDat=endDat.getTime();
                     var filterVisible=false;
                     if(req.body.dateSelected!=='no'){
@@ -65,7 +65,7 @@ module.exports = {
           startDate=new Date(req.body.startDate);
          startDate=startDate.getTime();
           endDate=new Date(req.body.endDate);
-         endDate.setDate(endDate.getDate()+1);
+         endDate.setDate(endDate.getDate());
          endDate=endDate.getTime();
          dateSelected=req.body.dateSelected;
         AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
