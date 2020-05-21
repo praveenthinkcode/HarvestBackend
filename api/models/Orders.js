@@ -79,7 +79,7 @@ consolidateOrders: async (startDate,endDate,dateSelected) => {
     if(dateSelected!=='no'){
         var orderItems1=[];
         orderItems.map((orders)=>{
-        if(orders.orderDate>=startDate&&orders.orderDate<=endDate){
+        if(orders.createdAt>=startDate&&orders.createdAt<=endDate){
             orderItems1.push(orders);
         }
     })
