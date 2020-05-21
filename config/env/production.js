@@ -149,7 +149,7 @@ module.exports = {
     ***************************************************************************/
     cors: {
       allowOrigins: [
-        'https://example.com',
+        'http://harvestapp.wheelhousecentral.co/',
       ]
     },
 
@@ -251,7 +251,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
-      'https://example.com',
+      'http://harvestapp.wheelhousecentral.co/',
       'https://staging.example.com',
     ],
 
