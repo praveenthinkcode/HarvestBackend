@@ -58,30 +58,29 @@ module.exports = {
             }
         })
     },
-    
+
     // Get Pending Orders
     getRecentOrders: async (req, res) => {
-        
-          startDate=new Date(req.body.startDate);
-         startDate=startDate.getTime();
-          endDate=new Date(req.body.endDate);
-         endDate.setDate(endDate.getDate());
-         endDate=endDate.getTime();
-         dateSelected=req.body.dateSelected;
+        startDate=new Date(req.body.startDate);
+        startDate=startDate.getTime();
+        endDate=new Date(req.body.endDate);
+        endDate.setDate(endDate.getDate());
+        endDate=endDate.getTime();
+        dateSelected=req.body.dateSelected;
         AuthenticationToken.findOne({token:req.body.token},async (err,found)=>{
             if(found){
                 try {
                     let recentOrders = await Orders.find({ orderStatus: "OrderPlaced" }).sort('orderDate DESC');
-                    var filterVisible=false;
-                    if(req.body.dateSelected!=='no'){
-                        var recentOrders1=[];
-                    recentOrders.map((orders)=>{
-                        if(orders.createdAt>=startDate&&orders.createdAt<=endDate){
-                            recentOrders1.push(orders);
-                        }
-                    })
-                    filterVisible=true;
-                    recentOrders=recentOrders1;
+                    var filterVisible = false;
+                    if(req.body.dateSelected !== 'no'){
+                        var recentOrders1 = [];
+                        recentOrders.map((orders)=>{
+                            if(orders.createdAt >= startDate && orders.createdAt <= endDate){
+                                recentOrders1.push(orders);
+                            }
+                        });
+                        filterVisible=true;
+                        recentOrders=recentOrders1;
                     }
                     let groupedItems = await Orders.consolidateOrders(startDate,endDate,dateSelected);
                     return res.ok({
@@ -192,21 +191,22 @@ module.exports = {
                 var recentOrders1=[];
             recentOrders.map((orders)=>{
                 if(orders.createdAt>=startDate&&orders.createdAt<=endDate){
-                    
+
                     recentOrders1.push(orders);
                 }
-            })
+            });
             recentOrders=recentOrders1;
             }
             let groupedItems = await Orders.consolidateOrders();
             let orderReports = [];
 
             async.forEachOf(recentOrders, (order, key, cb) => {
+                let timestamp = new Date(order.createdAt);
                 var orderDetails = {
                     'OrderId': order.orderId,
                     'Name': order.userName,
                     'Mobile': order.userMobileNo,
-                    'OrderDate': order.orderDate,
+                    'OrderDate': `${timestamp.getDate()}/${timestamp.getMonth()+1}/${timestamp.getFullYear()}`,
                     'Orders': '',
                     'Total Price': order.finalPrice
                 };
@@ -226,7 +226,6 @@ module.exports = {
             }, () => {
                 var workSheet = XLSX.utils.json_to_sheet(orderReports, {dateNF: 'yyyy-mm-dd@'});
                 var workBook = XLSX.utils.book_new();
-                console.log('y')
                 XLSX.utils.book_append_sheet(workBook, workSheet, 'consolidated_orders');
                 XLSX.writeFile(workBook, filePath);
 
